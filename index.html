@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل العملاء</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h3 {
+            color: #333;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button id="search-client-btn">ابحث عن عميل</button>
+        <div id="search-area" style="display: none;">
+            <input type="text" id="client-search" placeholder="ادخل اسم العميل">
+            <button onclick="searchClient()">ابحث</button>
+            <button onclick="showAddClientForm()">+</button>
+        </div>
+        
+        <div id="add-client-form" style="display: none;">
+            <h3>إضافة عميل جديد</h3>
+            <input type="text" id="client-name" placeholder="اسم العميل">
+            <input type="text" id="captain-name" placeholder="اسم الكابتن">
+            <label>هل العميل أول مرة يسوق؟</label>
+            <select id="first-time">
+                <option value="yes">نعم</option>
+                <option value="no">لا</option>
+            </select>
+            <button onclick="showTrainingForm()">استمرار</button>
+        </div>
+
+        <div id="training-form" style="display: none;">
+            <h3 id="training-title">تفاصيل التدريب</h3>
+            <label>التاريخ والوقت:</label>
+            <p id="session-datetime"></p>
+            <label>اختر رقم الحصة:</label>
+            <select id="session-number" onchange="showSkills()">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <!-- أضف بقية الحصص حتى 13 -->
+                <option value="13">13</option>
+            </select>
+            <div id="skills-area">
+                <!-- سيتم عرض المهارات هنا بناءً على رقم الحصة -->
+            </div>
+            <label>ملاحظات:</label>
+            <textarea id="notes" rows="4" placeholder="أدخل ملاحظاتك هنا..."></textarea>
+            <button onclick="finishSession()">إنهاء الحصة</button>
+            <button onclick="submitData()">إرسال البيانات</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("search-client-btn").onclick = function() {
+            document.getElementById("search-area").style.display = "block";
+        };
+
+        function showAddClientForm() {
+            document.getElementById("add-client-form").style.display = "block";
+        }
+
+        function showTrainingForm() {
+            let isFirstTime = document.getElementById("first-time").value;
+            document.getElementById("training-form").style.display = "block";
+            document.getElementById("training-title").innerText = isFirstTime === "yes" ? "نموذج أكاديمية ياسر يحيى لأول مرة" : "نموذج التقييم";
+            showCurrentDateTime();
+            showSkills();
+        }
+
+        function showCurrentDateTime() {
+            let now = new Date();
+            let datetime = now.toLocaleDateString("ar-EG") + " " + now.toLocaleTimeString("ar-EG");
+            document.getElementById("session-datetime").innerText = datetime;
+        }
+
+        function showSkills() {
+            let sessionNumber = document.getElementById("session-number").value;
+            let skillsArea = document.getElementById("skills-area");
+            skillsArea.innerHTML = ""; // إعادة تعيين المحتوى
+            
+            // إضافة المهارات بناءً على رقم الحصة
+            if (sessionNumber == "1") {
+                skillsArea.innerHTML = "<p>المهارات: الفحص، التهدئة، التحكم، الانطلاق</p>";
+            } else if (sessionNumber == "2") {
+                skillsArea.innerHTML = "<p>المهارات: استخدام الإشارات، الالتفاف يمين ويسار، التوجيه</p>";
+            } else if (sessionNumber == "3") {
+                skillsArea.innerHTML = "<p>المهارات: التقدير، القيادة في الشوارع الضيقة، الأمان</p>";
+            }
+            // أضف باقي الحصص حسب التفاصيل التي تريدها
+        }
+
+        function searchClient() {
+            let clientName = document.getElementById("client-search").value;
+            alert("بحث عن العميل: " + clientName);
+            // يمكنك تطوير كود البحث هنا
+        }
+
+        function finishSession() {
+            alert("تم إنهاء الحصة بنجاح!");
+            // يمكنك إضافة وظائف أخرى هنا إذا لزم الأمر
+        }
+
+        function submitData() {
+            let clientName = document.getElementById("client-name").value;
+            let captainName = document.getElementById("captain-name").value;
+            let notes = document.getElementById("notes").value;
+            let sessionNumber = document.getElementById("session-number").value;
+            let datetime = document.getElementById("session-datetime").innerText;
+            alert("تم إرسال البيانات بنجاح!\nاسم العميل: " + clientName + "\nاسم الكابتن: " + captainName + "\nرقم الحصة: " + sessionNumber + "\nالتاريخ والوقت: " + datetime + "\nالملاحظات: " + notes);
+            // يمكنك هنا إضافة كود لحفظ البيانات في قاعدة البيانات أو إرسالها
+        }
+    </script>
+</body>
+</html>
